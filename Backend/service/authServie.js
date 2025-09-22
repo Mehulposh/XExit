@@ -1,7 +1,7 @@
 // services/authService.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../model/UserModel");
 const { SECRET_KEY, HR_EMAIL, HR_PASSWORD } = process.env;
 
 const registerUser = async (username, password) => {
