@@ -1,5 +1,5 @@
 // controllers/exitInterviewController.js
-const exitInterviewService = require("../service/ExitInterviewService");
+const exitInterviewService = require("../service/AdminExitInterviewService");
 
 const getExitResponses = async (req, res) => {
   if (req.user.role !== "hr") {

@@ -1,7 +1,7 @@
 // routes/exitInterviewRoutes.js
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
-const exitInterviewController = require("../controllers/ExitInterviewController");
+const exitInterviewController = require("../controllers/AdminExitInterviewController");
 
 const router = express.Router();
 
