@@ -5,15 +5,17 @@ const User = require("../model/UserModel");
 const { SECRET_KEY, HR_EMAIL, HR_PASSWORD } = process.env;
 
 const registerUser = async (username, password) => {
+    console.log('register password',password);
+    
   const existingUser = await User.findOne({ username });
   if (existingUser) {
     throw new Error("Username already exists");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  
   const newUser = new User({
     username,
-    password: hashedPassword,
+    password,
     role: "employee",
   });
   await newUser.save();
@@ -32,11 +34,17 @@ const loginUser = async (username, password) => {
 
   // Employee login
   const user = await User.findOne({ username });
+  console.log(user);
+  
   if (!user) {
     throw new Error("User not found");
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await user.comparePassword(password);
+  console.log(password);
+  
+  console.log(isPasswordValid);
+  
   if (!isPasswordValid) {
     throw new Error("Invalid credentials");
   }
