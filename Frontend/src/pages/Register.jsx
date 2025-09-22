@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {backend} from '../../Endpoint.js'
 import { TextField, Button, Typography, Box } from "@mui/material";
 
 const Register = () => {
@@ -34,7 +35,7 @@ const Register = () => {
 
     try {
       // Call the registration API
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/register`, {
+      await axios.post(`${backend.endpoint}/auth/register`, {
         username,
         password,
       });
