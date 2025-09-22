@@ -1,96 +1,88 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Alert,
+  Button,
+  TextField,
+  Card,
+  CardContent,
 } from "@mui/material";
 import axiosInstance from "../utils/axisInstance";
 
-const HRExitInterviews = () => {
-  const [responses, setResponses] = useState([]);
-  const [error, setError] = useState("");
+const ExitInterview = () => {
+  const [responses, setResponses] = useState([
+    { questionText: "What motivated you to resign?", response: "" },
+    { questionText: "What could the company improve?", response: "" },
+    {
+      questionText: "Would you recommend this company to others?",
+      response: "",
+    },
+  ]);
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const fetchResponses = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axiosInstance.get("/admin/exit_responses", {
-          headers: { Authorization: token },
-        });
+  const handleInputChange = (index, value) => {
+    const newResponses = [...responses];
+    newResponses[index].response = value;
+    setResponses(newResponses);
+  };
 
-        setResponses(response.data.data || []);
-      } catch (error) {
-        setError(
-          error.response?.data?.message ||
-            "Failed to fetch exit interview responses."
-        );
-      }
-    };
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axiosInstance.post(
+        "/user/responses",
+        { responses },
+        { headers: { Authorization: token } }
+      );
 
-    fetchResponses();
-  }, []);
+      setMessage("Exit interview submitted successfully.");
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message || "Error submitting exit interview."
+      );
+    }
+  };
 
   return (
     <Box sx={{ padding: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Exit Interview Responses
+        Exit Interview
       </Typography>
 
-      {error && <Alert severity="error">{error}</Alert>}
-
-      <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Employee Username</TableCell>
-              <TableCell>Responses</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {responses.length > 0 ? (
-              responses.map((response) => (
-                <TableRow key={response.employeeId?._id || response.employeeId}>
-                  {/* Display username or fallback */}
-                  <TableCell>
-                    {response.employeeId?.username || "Unknown"}
-                  </TableCell>
-                  <TableCell>
-                    {response.responses?.length > 0 ? (
-                      response.responses.map((item, index) => (
-                        <Box key={index} sx={{ marginBottom: 2 }}>
-                          <Typography variant="body2">
-                            <strong>{item.questionText}</strong>
-                          </Typography>
-                          <Typography variant="body1">
-                            {item.response || "No response provided."}
-                          </Typography>
-                        </Box>
-                      ))
-                    ) : (
-                      <Typography>No responses submitted.</Typography>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={2}>
-                  <Typography>No exit interview responses found.</Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Card>
+        <CardContent>
+          {responses.map((item, index) => (
+            <Box key={index} sx={{ marginBottom: 3 }}>
+              <Typography variant="body1" gutterBottom>
+                {item.questionText}
+                <span style={{ color: "red" }}>&nbsp;*</span>
+              </Typography>
+              <TextField
+                value={item.response}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                multiline
+                fullWidth
+                required
+              />
+            </Box>
+          ))}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            fullWidth
+          >
+            Submit
+          </Button>
+          {message && (
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+              {message}
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
     </Box>
   );
 };
 
-export default HRExitInterviews;
+export default ExitInterview;
