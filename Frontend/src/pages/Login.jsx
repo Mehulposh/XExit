@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance"; // Import axios instance
+import axiosInstance from "../utils/axisInstance.js"; // Import axios instance
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 
 const Login = () => {
