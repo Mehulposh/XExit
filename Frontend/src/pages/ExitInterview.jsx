@@ -7,7 +7,7 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../utils/axisInstance";
 
 const ExitInterview = () => {
   const [responses, setResponses] = useState([

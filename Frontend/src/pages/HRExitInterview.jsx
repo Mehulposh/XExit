@@ -11,7 +11,7 @@ import {
   Paper,
   Alert,
 } from "@mui/material";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../utils/axisInstance";
 
 const HRExitInterviews = () => {
   const [responses, setResponses] = useState([]);
