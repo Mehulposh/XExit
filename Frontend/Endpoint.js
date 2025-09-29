@@ -1,3 +1,3 @@
 export  const backend = {
-    'endpoint': 'http://localhost:8080/api'
+    'endpoint': 'https://xexit-ia3b.onrender.com'
 }
